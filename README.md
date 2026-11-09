@@ -1,5 +1,5 @@
 <h1 align="center">
-  Douyin-Vue
+  TinTon-Vue
 </h1>
 
 <p align="center">
