@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="DouyinCode" v-if="modelValue">
+    <div class="TinTonCode" v-if="modelValue">
       <div class="content">
         <div class="video-poster">
           <img :src="_checkImgUrl(item.video.cover.url_list[0])" class="poster" />
@@ -14,23 +14,23 @@
         </div>
       </div>
       <div class="toolbar">
-        <div class="title">分享到</div>
+        <div class="title">shiriki kwa</div>
         <div class="shares">
           <div class="share-to" @click="_no">
             <img src="../assets/img/icon/components/video/toqq.webp" alt="" />
-            <span>QQ好友</span>
+            <span>rafiki wa QQ</span>
           </div>
           <div class="share-to" @click="_no">
             <img src="../assets/img/icon/components/video/tozone.webp" alt="" />
-            <span>QQ空间</span>
+            <span>ukuta wa QQ</span>
           </div>
           <div class="share-to" @click="_no">
             <img src="../assets/img/icon/components/video/towechatchat.webp" alt="" />
-            <span>微信好友</span>
+            <span>Rafiki wa wechat</span>
           </div>
           <div class="share-to" @click="_no">
             <img src="../assets/img/icon/components/video/towechat.webp" alt="" />
-            <span>朋友圈</span>
+            <span>hali ya wechat</span>
           </div>
           <div class="share-to" @click="_no">
             <img src="../assets/img/icon/components/video/todownload.webp" alt="" />
