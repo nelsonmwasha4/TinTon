@@ -3,17 +3,17 @@
     <SlideHorizontal name="first" v-model:index="state.baseIndex">
       <SlideItem class="sidebar">
         <div class="header">
-          <div class="left">下午好</div>
+          <div class="left">Good Afternoon</div>
           <div class="right" @click="nav('/home/live')">
             <Icon icon="iconamoon:scanner" />
-            <span>扫一扫</span>
+            <span>Scan</span>
           </div>
         </div>
         <div class="card">
           <div class="header">
-            <div class="left">常用小程序</div>
+            <div class="left">Mini Apps</div>
             <div class="right">
-              <span>全部</span>
+              <span>All</span>
               <Icon icon="icon-park-outline:right" />
             </div>
           </div>
@@ -24,7 +24,7 @@
                 src="https://lf3-static.bytednsdoc.com/obj/eden-cn/pipieh7nupabozups/toutiao_web_pc/tt-icon.png"
                 alt=""
               />
-              <span>今日头条</span>
+              <span>Top Stories</span>
             </div>
             <div class="item" @click="_no">
               <img
@@ -32,16 +32,16 @@
                 src="https://gd-hbimg.huaban.com/65130a3e6a139530bb03bd118e21a2603af7df4e1303b-OOzcBu_fw658webp"
                 alt=""
               />
-              <span>西瓜视频</span>
+              <span>TinTon Videos</span>
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="header">
-            <div class="left">最近常看</div>
+            <div class="left">Recently Watched</div>
             <div class="right">
-              <span>全部</span>
+              <span>All</span>
               <Icon icon="icon-park-outline:right" />
             </div>
           </div>
@@ -50,48 +50,48 @@
               <img
                 src="https://img.tol.vip/avatar/WEIXIN/3aSuTGYTzjHvcHy0y0tH1eiShKRk9Sgd.jpg?_upt=de4a5c251709635127"
               />
-              <span>随机名字</span>
+              <span>Your Name</span>
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="header">
-            <div class="left">常用功能</div>
+            <div class="left">Quick Actions</div>
             <div class="right"></div>
           </div>
           <div class="content">
             <div class="item" @click="_no">
               <Icon icon="ion:wallet-outline" />
-              <span>我的钱包</span>
+              <span>My Wallet</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="mingcute:coupon-line" />
-              <span>券包</span>
+              <span>Coupons</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="icon-park-outline:bytedance-applets" />
-              <span>小程序</span>
+              <span>Mini Apps</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="solar:history-linear" />
-              <span>观看历史</span>
+              <span>Watch History</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="fluent:content-settings-24-regular" />
-              <span>内容偏好</span>
+              <span>Content Preferences</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="iconoir:cloud-download" />
-              <span>离线模式</span>
+              <span>Offline Mode</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="ep:setting" />
-              <span>设置</span>
+              <span>Settings</span>
             </div>
             <div class="item" @click="_no">
               <Icon icon="icon-park-outline:baggage-delay" />
-              <span>稍后再看</span>
+              <span>Watch Later</span>
             </div>
           </div>
         </div>
@@ -191,7 +191,7 @@
 
     <BlockDialog v-model="state.showBlockDialog" />
 
-    <ConfirmDialog title="设置备注名" ok-text="确认" v-model:visible="state.showChangeNote">
+    <ConfirmDialog title="Set Nickname" ok-text="Confirm" v-model:visible="state.showChangeNote">
       <Search mode="light" v-model="state.test" :isShowSearchIcon="false" />
     </ConfirmDialog>
 
