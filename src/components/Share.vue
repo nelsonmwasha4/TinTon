@@ -12,7 +12,7 @@
   >
     <div class="share">
       <div class="title">
-        <span>分享给朋友</span>
+        <span>Share To Friends</span>
         <dy-back mode="light" img="close" direction="right" @click.stop="closeShare"></dy-back>
       </div>
       <div class="content">
@@ -38,7 +38,7 @@
           </div>
           <div class="option" @click.stop="closeShare($router.push('/message/share-to-friend'))">
             <dy-back class="more" mode="light" direction="right"></dy-back>
-            <span>更多朋友</span>
+            <span>More Friends</span>
           </div>
         </div>
         <div class="bottom">
@@ -50,10 +50,10 @@
             </div>
             <div class="btns">
               <dy-button type="dark2" radius="7" v-if="store.selectFriends.length > 1" @click="_no"
-                >建群并发送
+                >Create  Groups & Send 
               </dy-button>
               <dy-button type="primary" radius="7" @click="shared"
-                >{{ store.selectFriends.length > 1 ? '分别发送' : '发送' }}
+                >{{ store.selectFriends.length > 1 ? 'Separately : 'Send }}
               </dy-button>
             </div>
           </div>
@@ -66,15 +66,15 @@
                   src="../assets/img/icon/components/video/torichang.png"
                   alt=""
                 />
-                <span>转发</span>
+                <span>Forward</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('ShareToFriend'))">
                 <Icon icon="icon-park-solid:good-two" />
-                <span>推荐给朋友</span>
+                <span>Recommend To Friends</span>
               </div>
               <div class="option" @click.stop="copyLink">
                 <Icon icon="humbleicons:link" />
-                <span>复制链接</span>
+                <span>Copy Link</span>
               </div>
               <div class="option" @click.stop="_no">
                 <img
@@ -82,28 +82,28 @@
                   src="../assets/img/icon/components/video/comeonplay.png"
                   alt=""
                 />
-                <span>合拍</span>
+                <span>Duet</span>
               </div>
-              <div class="option" @click.stop="_no">
+              <div class="option" @click.stop=_no">
                 <img class="small" src="../assets/img/icon/components/video/dou.webp" alt="" />
-                <span>帮上热门</span>
+                <span>Add To Trending 门</span>
               </div>
               <div class="option" @click.stop="$router.push('/home/report', { mode: this.mode })">
                 <img class="small" src="../assets/img/icon/components/video/warring.png" alt="" />
-                <span>举报</span>
+                <span>Report</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('ShareToFriend'))">
                 <Icon icon="ion:paper-plane" />
-                <span>私信朋友</span>
+                <span>Message Friend</span>
               </div>
               <div class="option" v-if="canDownload" @click.stop="closeShare($emit('download'))">
                 <Icon icon="mingcute:download-fill" />
-                <span>保存本地</span>
+                <span>Save to Device</span>
               </div>
               <div class="option" @click.stop="_no">
                 <!--TODO icon不对            -->
                 <img class="small" src="../assets/img/icon/components/video/feedback.webp" alt="" />
-                <span>建群分享</span>
+                <span>Group Share</span>
               </div>
               <div class="option" @click.stop="_no">
                 <img
@@ -111,43 +111,43 @@
                   src="../assets/img/icon/components/video/comeonlook.webp"
                   alt=""
                 />
-                <span>一起看视频</span>
+                <span>一Watch Together</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('dislike'))">
                 <img class="small" src="../assets/img/icon/components/video/dislike.png" alt="" />
-                <span>不感兴趣</span>
+                <span>Not Interested</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('showDouyinCode'))">
                 <Icon icon="tabler:photo" />
-                <span>生成图片</span>
+                <span>Generate Image</span>
               </div>
               <div class="option" @click.stop="_no">
                 <img class="small" src="../assets/img/icon/components/video/bizhi.webp" alt="" />
-                <span>动态壁纸</span>
+                <span>Live Wallpaper</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('play-feedback'))">
                 <img class="small" src="../assets/img/icon/components/video/feedback.webp" alt="" />
-                <span>播放反馈</span>
+                <span>Playback Feedback</span>
               </div>
             </template>
             <template v-if="mode === 'music'">
               <div class="option" @click.stop="closeShare($emit('ShareToFriend'))">
                 <img class="small" src="../assets/img/icon/components/video/tofriend.webp" alt="" />
-                <span>私信朋友</span>
+                <span>Message Friend</span>
               </div>
               <div class="option" @click.stop="$router.push('/home/report', { mode: this.mode })">
                 <img class="small" src="../assets/img/icon/components/video/warring.png" alt="" />
-                <span>举报音乐</span>
+                <span>Report Music</span>
               </div>
             </template>
             <template v-if="mode === 'my-music'">
               <div class="option" @click.stop="_no">
                 <img class="small" src="../assets/img/icon/components/video/torichang.png" alt="" />
-                <span>转发到日常</span>
+                <span>Share to Moment</span>
               </div>
               <div class="option" @click.stop="closeShare($emit('ShareToFriend'))">
                 <img class="small" src="../assets/img/icon/components/video/tofriend.webp" alt="" />
-                <span>私信朋友</span>
+                <span>Message Friend</span>
               </div>
             </template>
           </div>
