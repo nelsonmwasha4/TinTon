@@ -2,15 +2,15 @@
   <div class="login">
     <BaseHeader mode="light" backMode="dark" backImg="close">
       <template v-slot:right>
-        <span class="f14" @click="nav('/login/help')">帮助与设置</span>
+        <span class="f14" @click="nav('/login/help')">Help&Settings</span>
       </template>
     </BaseHeader>
     <Loading v-if="data.loading.getPhone" />
     <div v-else class="content">
       <div class="desc">
-        <div class="title">登录看朋友内容</div>
+        <div class="title">Log in to see friends content</div>
         <div class="phone-number">138****8000</div>
-        <div class="sub-title">认证服务由中国移动提供</div>
+        <div class="sub-title">Verification Service Provided By TinTon</div>
       </div>
 
       <dy-button
@@ -20,10 +20,10 @@
         :loadingWithText="true"
         @click="login"
       >
-        {{ data.loading.login ? '登录中' : '一键登录' }}
+        {{ data.loading.login ? 'Logging in...: '一Log In With One Tap}}
       </dy-button>
       <dy-button :active="false" type="white" @click="nav('/login/other')"
-        >其他手机号码登录
+        >Log in with another phone number 
       </dy-button>
 
       <div class="protocol" :class="data.showAnim ? 'anim-bounce' : ''">
@@ -32,20 +32,20 @@
           <Check v-model="data.isAgree" />
         </div>
         <div class="right">
-          我已阅读并同意
-          <span class="link" @click="nav('/service-protocol', { type: '“抖音”用户服务协议' })"
-            >用户协议</span
+          I have  read and agree to the 
+          <span class="link" @click="nav('/service-protocol', { type: '“TinTon User Service Agreement})"
+            >User Agreement</span
           >
-          和
-          <span class="link" @click="nav('/service-protocol', { type: '“抖音”隐私政策' })"
-            >隐私政策</span
+          and
+          <span class="link" @click="nav('/service-protocol', { type: '“TinTon Privacy Policy})"
+            >Privacy Policy</span
           >
           <div>
-            以及
-            <span class="link" @click="nav('/service-protocol', { type: '中国移动认证服务协议' })"
-              >《中国移动认证服务条款》</span
+            and also
+            <span class="link" @click="nav('/service-protocol', { type: 'TinTon Authentication Service Agreement})"
+              >《TinTon Authentication Service Terms 》</span
             >
-            ，同时登录并使用抖音火山版（原“火山小视频”）和抖音
+            ，And Log In To Use TinTon 
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
           v-if="!data.isOtherLogin"
           class="other-login-text link"
           @click="data.isOtherLogin = !data.isOtherLogin"
-          >其他方式登录</span
+          >log in another way</span
         >
       </transition>
     </div>
