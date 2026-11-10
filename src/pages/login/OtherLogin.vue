@@ -2,13 +2,13 @@
   <div class="other-login" id="other-login">
     <BaseHeader mode="light" backMode="dark" backImg="back">
       <template v-slot:right>
-        <span class="f14" @click="$router.push('/login/help')">帮助与设置</span>
+        <span class="f14" @click="$router.push('/login/help')">Help&Settings</span>
       </template>
     </BaseHeader>
     <div class="content">
       <div class="desc">
         <div class="title">Log in to see friends content</div>
-        <div class="sub-title">Unregistered number will be oregistered automatically after verification</div>cxz
+        <div class="sub-title">Unregistered number will be  registered automatically after verification</div>cxz
       </div>
 
       <LoginInput autofocus type="phone" v-model="phone" placeholder="Enter Phone Number" />
