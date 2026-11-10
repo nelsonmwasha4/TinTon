@@ -1,6 +1,6 @@
 <template>
   <div class="indicator-home" :class="{ isLight }">
-    <div class="notice" :style="noticeStyle"><span>下拉刷新内容</span></div>
+    <div class="notice" :style="noticeStyle"><span>Poll down to refresh</span></div>
     <div class="toolbar" ref="toolbar" :style="toolbarStyle">
       <Icon
         icon="tabler:menu-deep"
@@ -11,20 +11,20 @@
       <div class="tab-ctn">
         <div class="tabs" ref="tabs">
           <div class="tab" :class="{ active: index === 0 }" @click.stop="change(0)">
-            <span>热点</span>
+            <span>Trending</span>
           </div>
           <div class="tab" :class="{ active: index === 1 }" @click.stop="change(1)">
-            <span>长视频</span>
+            <span>Long Videos</span>
           </div>
           <div class="tab" :class="{ active: index === 2 }" @click.stop="change(2)">
-            <span>关注</span>
+            <span>Following</span>
             <img src="../../../assets/img/icon/live.webp" class="tab2-img" />
           </div>
           <div class="tab" :class="{ active: index === 3 }" @click.stop="change(3)">
-            <span>经验</span>
+            <span>Experience</span>
           </div>
           <div class="tab" :class="{ active: index === 4 }" @click.stop="change(4)">
-            <span>推荐</span>
+            <span>For You</span>
           </div>
         </div>
         <div class="indicator" ref="indicator"></div>
