@@ -4,9 +4,9 @@
       <div class="search">
         <div class="search-input">
           <Icon icon="tabler:search" />
-          <div class="placeholder">50元话费充值</div>
+          <div class="placeholder">Top up 50 TZS Airtime</div>
           <Icon color="gray" icon="lucide:camera" />
-          <div class="search-notice">搜索</div>
+          <div class="search-notice">Search</div>
         </div>
         <div class="more">
           <Icon icon="ep:shopping-cart" />
@@ -20,27 +20,27 @@
             <div class="options">
               <div class="option" @click="_no">
                 <Icon icon="lets-icons:order-light" />
-                <div>我的订单</div>
+                <div>My Order</div>
               </div>
               <div class="option" @click="_no">
                 <Icon icon="material-symbols-light:charging-station-outline" />
-                <div>手机充值</div>
+                <div>Airtime Top up</div>
               </div>
               <div class="option" @click="_no">
                 <Icon icon="system-uicons:message" />
-                <div>购物消息</div>
+                <div>Shoping Messages</div>
               </div>
               <div class="option" @click="_no">
                 <Icon icon="fluent:location-16-regular" />
-                <div>小时达</div>
+                <div>Express Delivery</div>
               </div>
               <div class="option" @click="_no">
                 <Icon icon="dashicons:money-alt" />
-                <div>退款/售后</div>
+                <div>Returns/Support</div>
               </div>
               <div class="option" @click="_no">
                 <Icon icon="icon-park-outline:clothes-turtleneck" />
-                <div>潮流服饰</div>
+                <div>Trendy Fashion</div>
               </div>
             </div>
           </div>
@@ -48,33 +48,33 @@
             <div class="baiyibutie">
               <div class="item">
                 <img src="@/assets/img/icon/shop/baiyibutie.png" alt="" />
-                <span>38节补贴</span>
+                <span>Special Offer</span>
               </div>
               <div class="item">
                 <img src="@/assets/img/icon/shop/1.webp" alt="" />
                 <span class="price">
-                  <span class="m">￥</span>
+                  <span class="m">TZS</span>
                   <span>470</span>
                 </span>
               </div>
               <div class="item">
                 <img src="@/assets/img/icon/shop/2.webp" alt="" />
                 <span class="price">
-                  <span class="m">￥</span>
+                  <span class="m">TZS</span>
                   <span>699</span>
                 </span>
               </div>
               <div class="item">
                 <img src="@/assets/img/icon/shop/3.png" alt="" />
                 <span class="price">
-                  <span class="m">￥</span>
+                  <span class="m">TZS</span>
                   <span>8.8</span>
                 </span>
               </div>
               <div class="item">
                 <img src="@/assets/img/icon/shop/4.jpg" alt="" />
                 <span class="price">
-                  <span class="m">￥</span>
+                  <span class="m">TZS</span>
                   <span>2.99</span>
                 </span>
               </div>
@@ -98,9 +98,9 @@
                       ￥
                       <div class="big">{{ item.price }}</div>
                     </div>
-                    <div class="num">已售{{ item.sold }}件</div>
+                    <div class="num">Sold{{ item.sold }}件</div>
                   </div>
-                  <div class="low" v-if="item.isLowPrice">近30天低价</div>
+                  <div class="low" v-if="item.isLowPrice">Lowest price in 30 days</div>
                 </div>
               </div>
             </div>
