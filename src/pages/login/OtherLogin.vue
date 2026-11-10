@@ -7,11 +7,11 @@
     </BaseHeader>
     <div class="content">
       <div class="desc">
-        <div class="title">登录看朋友内容</div>
-        <div class="sub-title">未注册的手机号验证通过后将自动注册</div>
+        <div class="title">Log in to see friends content</div>
+        <div class="sub-title">Unregistered number will be oregistered automatically after verification</div>cxz
       </div>
 
-      <LoginInput autofocus type="phone" v-model="phone" placeholder="请输入手机号" />
+      <LoginInput autofocus type="phone" v-model="phone" placeholder="Enter Phone Number" />
 
       <div class="notice" v-if="notice">
         {{ notice }}
@@ -23,17 +23,17 @@
           <Check v-model="isAgree" />
         </div>
         <div class="right">
-          已阅读并同意
+          I have read and agree to the 
           <span
             class="link"
-            @click="$router.push('/service-protocol', { type: '“抖音”用户服务协议' })"
-            >用户协议</span
+            @click="$router.push('/service-protocol', { type: '“TinTon User Service Agreement})"
+            >User Agreement</span
           >
-          和
-          <span class="link" @click="$router.push('/service-protocol', { type: '“抖音”隐私政策' })"
-            >隐私政策</span
+          and
+          <span class="link" @click="$router.push('/service-protocol', { type: '“TinTon Privacy Policy})"
+            >Privacy Policy</span
           >
-          ，同时登录并使用抖音火山版（原“火山小视频”）和抖音
+          ，and log in to use TinTon 
         </div>
       </div>
 
@@ -44,12 +44,12 @@
         :disabled="phone.length < 10"
         @click="getCode"
       >
-        获取短信验证码
+        Get SMS Code 
       </dy-button>
 
       <div class="options">
-        <span class="link" @click="$router.push('/login/password')">密码登录</span>
-        <span class="link" @click="otherLogin">其他方式登录</span>
+        <span class="link" @click="$router.push('/login/password')">Password login</span>
+        <span class="link" @click="otherLogin">Log In Another Way</span>
       </div>
 
       <from-bottom-dialog
@@ -62,19 +62,19 @@
         <div class="block-dialog">
           <div class="item" @click="_no">
             <img src="../../assets/img/icon/login/toutiao-round.png" alt="" />
-            <span>今日头条登录</span>
+            <span>log in with email address</span>
           </div>
           <div class="item" @click="_no">
             <img src="../../assets/img/icon/login/qq.webp" alt="" />
-            <span>QQ登录</span>
+            <span>log in with Google</span>
           </div>
           <div class="item" @click="_no">
             <img src="../../assets/img/icon/login/wechat.webp" alt="" />
-            <span>微信登录</span>
+            <span>log in with Facebook</span>
           </div>
           <div class="item" @click="_no">
             <img src="../../assets/img/icon/login/weibo.webp" alt="" />
-            <span>微博登录</span>
+            <span>log in with Instagram</span>
           </div>
           <div class="space"></div>
           <div class="item" @click="isOtherLogin = false">取消</div>
