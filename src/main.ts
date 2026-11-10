@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import swahili from './swahili'
 import './assets/less/index.less'
 import { startMock } from '@/mock'
 import router from './router'
@@ -35,6 +36,7 @@ HTMLElement.prototype.addEventListener = new Proxy(HTMLElement.prototype.addEven
 })
 
 const vClick = useClick()
+window.$swahili = swahili
 const pinia = createPinia()
 const app = createApp(App)
 app.mixin(mixin)
