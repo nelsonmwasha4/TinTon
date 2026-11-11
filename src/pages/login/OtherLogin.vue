@@ -26,11 +26,11 @@
           I have read and agree to the 
           <span
             class="link"
-            @click="$router.push('/service-protocol', { type: '“TinTon User Service Agreement})"
+            @click="$router.push('/service-protocol')" { type: '“TinTon User Service Agreement'})"
             >User Agreement</span
           >
           and
-          <span class="link" @click="$router.push('/service-protocol', { type: '“TinTon Privacy Policy})"
+          <span class="link" @click="$router.push('/service-protocol', { type: '“TinTon Privacy Policy"'})"
             >Privacy Policy</span
           >
           ，and log in to use TinTon 
