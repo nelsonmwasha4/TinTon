@@ -1,7 +1,9 @@
+import { TinTonBuilder } from "./builder/index.js";
+TinTonBuilder.start();
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/less/index.less'
-import swahili from "./Src/lang/swahili";
+import swahili from "./lang/swahili";
 import { startMock } from '@/mock'
 import router from './router'
 import mixin from './utils/mixin'
