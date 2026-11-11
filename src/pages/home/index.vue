@@ -1,512 +1,188 @@
 <template>
-  <div class="test-slide-wrapper" id="home-index">
-    <SlideHorizontal name="first" v-model:index="state.baseIndex">
-      <SlideItem class="sidebar">
-        <div class="header">
-          <div class="left">Good Afternoon</div>
-          <div class="right" @click="nav('/home/live')">
-            <Icon icon="iconamoon:scanner" />
-            <span>Scan</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="header">
-            <div class="left">Mini Apps</div>
-            <div class="right">
-              <span>All</span>
-              <Icon icon="icon-park-outline:right" />
-            </div>
-          </div>
-          <div class="content">
-            <div class="item" @click="_no">
-              <img
-                class="xcx"
-                src="https://lf3-static.bytednsdoc.com/obj/eden-cn/pipieh7nupabozups/toutiao_web_pc/tt-icon.png"
-                alt=""
-              />
-              <span>Top Stories</span>
-            </div>
-            <div class="item" @click="_no">
-              <img
-                class="xcx"
-                src="https://gd-hbimg.huaban.com/65130a3e6a139530bb03bd118e21a2603af7df4e1303b-OOzcBu_fw658webp"
-                alt=""
-              />
-              <span>TinTon Videos</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="header">
-            <div class="left">Recently Watched</div>
-            <div class="right">
-              <span>All</span>
-              <Icon icon="icon-park-outline:right" />
-            </div>
-          </div>
-          <div class="content">
-            <div class="item avatar" @click="_no" :key="i" v-for="i in 6">
-              <img
-                src="https://img.tol.vip/avatar/WEIXIN/3aSuTGYTzjHvcHy0y0tH1eiShKRk9Sgd.jpg?_upt=de4a5c251709635127"
-              />
-              <span>Your Name</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="header">
-            <div class="left">Quick Actions</div>
-            <div class="right"></div>
-          </div>
-          <div class="content">
-            <div class="item" @click="_no">
-              <Icon icon="ion:wallet-outline" />
-              <span>My Wallet</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="mingcute:coupon-line" />
-              <span>Coupons</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="icon-park-outline:bytedance-applets" />
-              <span>Mini Apps</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="solar:history-linear" />
-              <span>Watch History</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="fluent:content-settings-24-regular" />
-              <span>Content Preferences</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="iconoir:cloud-download" />
-              <span>Offline Mode</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="ep:setting" />
-              <span>Settings</span>
-            </div>
-            <div class="item" @click="_no">
-              <Icon icon="icon-park-outline:baggage-delay" />
-              <span>Watch Later</span>
-            </div>
-          </div>
-        </div>
-      </SlideItem>
-      <SlideItem>
-        <IndicatorHome
-          v-if="!state.fullScreen"
-          :loading="baseStore.loading"
-          name="second"
-          @showSlidebar="state.baseIndex = 0"
-          v-model:index="state.navIndex"
-        />
-        <SlideHorizontal
-          class="first-horizontal-item"
-          name="second"
-          :change-active-index-use-anim="false"
-          v-model:index="state.navIndex"
-        >
-          <!--          <SlideItem></SlideItem>-->
-          <Slide0 :active="state.navIndex === 0 && state.baseIndex === 1" />
-          <SlideItem>
-            <LongVideo :active="state.navIndex === 1 && state.baseIndex === 1" />
-          </SlideItem>
-          <!--          <SlideItem></SlideItem>-->
-          <Slide2 :active="state.navIndex === 2 && state.baseIndex === 1" />
-          <SlideItem>
-            <Community :active="state.navIndex === 3 && state.baseIndex === 1" />
-          </SlideItem>
-          <Slide4 :active="state.navIndex === 4 && state.baseIndex === 1" />
-        </SlideHorizontal>
-
-        <BaseFooter v-bind:init-tab="1" />
-        <BaseMask
-          v-if="state.baseIndex === 0"
-          @click="state.baseIndex = 1"
-          mode="white"
-          style="position: absolute"
-        />
-      </SlideItem>
-      <SlideItem>
-        <UserPanel
-          ref="uploader"
-          v-model:currentItem="state.currentItem"
-          :active="state.baseIndex === 2"
-          @toggleCanMove="(e) => (state.canMove = e)"
-          @back="state.baseIndex = 1"
-          @showFollowSetting="state.showFollowSetting = true"
-          @showFollowSetting2="state.showFollowSetting2 = true"
-        />
-      </SlideItem>
-    </SlideHorizontal>
-
-    <Comment
-      page-id="home-index"
-      :video-id="state.currentItem.aweme_id"
-      v-model="state.commentVisible"
-      @close="closeComments"
-    />
-
-    <Share
-      v-model="state.isSharing"
-      ref="share"
-      page-id="home-index"
-      @dislike="dislike"
-      :item="state.currentItem"
-      :videoId="state.recommendList[state.itemIndex]?.id"
-      :canDownload="state.recommendList[state.itemIndex]?.canDownload"
-      @play-feedback="state.showPlayFeedback = true"
-      @shareToFriend="delayShowDialog(() => (state.shareToFriend = true))"
-      @showDouyinCode="state.showDouyinCode = true"
-      @download="state.shareType = 9"
-    />
-
-    <PlayFeedback v-model="state.showPlayFeedback" />
-
-    <DouyinCode :item="state.currentItem" v-model="state.showDouyinCode" />
-
-    <ShareTo
-      v-model:type="state.shareType"
-      :videoId="state.recommendList[state.itemIndex]?.id"
-      :canDownload="state.recommendList[state.itemIndex]?.canDownload"
-    />
-
-    <FollowSetting
-      v-model:currentItem="state.currentItem"
-      @showChangeNote="delayShowDialog((e) => (state.showChangeNote = true))"
-      @showBlockDialog="delayShowDialog((e) => (state.showBlockDialog = true))"
-      @showShare="delayShowDialog((e) => (state.isSharing = true))"
-      v-model="state.showFollowSetting"
-    />
-
-    <FollowSetting2
-      v-model:currentItem="state.currentItem"
-      @cancelFollow="uploader.cancelFollow()"
-      v-model="state.showFollowSetting2"
-    />
-
-    <BlockDialog v-model="state.showBlockDialog" />
-
-    <ConfirmDialog title="Set Nickname" ok-text="Confirm" v-model:visible="state.showChangeNote">
-      <Search mode="light" v-model="state.test" :isShowSearchIcon="false" />
-    </ConfirmDialog>
-
-    <ShareToFriend v-model="state.shareToFriend" />
-
-    <BaseMask v-if="!isMobile" @click="isMobile = true" />
-    <div v-if="!isMobile" class="guide">
-      <Icon class="danger" icon="mynaui:danger-triangle" />
-      <Icon class="close" icon="simple-line-icons:close" @click="isMobile = true" />
-      <div class="txt">
-        <h2>切换至手机模式获取最佳体验</h2>
-        <h3>1. 按 F12 调出控制台</h3>
-        <h3>2. 按 Ctrl+Shift+M，或点击下面图标</h3>
+  <div class="home">
+    <div class="topbar">
+      <h2>TinTon</h2>
+      <div class="top-actions">
+        <span @click="goSearch">🔍 Tafuta</span>
       </div>
-      <img src="@/assets/img/guide.png" alt="" />
+    </div>
+
+    <div class="tabs">
+      <span :class="{ active: tab === 'foryou' }" @click="tab = 'foryou'">Kwa Ajili Yako</span>
+      <span :class="{ active: tab === 'live' }" @click="tab = 'live'">Live</span>
+      <span :class="{ active: tab === 'music' }" @click="tab = 'music'">Muziki</span>
+    </div>
+
+    <div v-if="tab === 'foryou'" class="feed">
+      <div v-for="video in videos" :key="video.id" class="video-card">
+        <div class="video-thumb">
+          <span class="play">▶</span>
+          <span class="duration">{{ video.duration }}</span>
+        </div>
+        <div class="video-info">
+          <div class="title">{{ video.title }}</div>
+          <div class="author">@{{ video.author }} • {{ video.views }} views</div>
+          <div class="actions">
+            <span>❤️ {{ video.likes }}</span>
+            <span>💬 {{ video.comments }}</span>
+            <span @click="shareVideo(video)">↗ Shiriki</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="tab === 'live'" class="empty">
+      <h3>Live Sasa</h3>
+      <p>Hakuna live kwa sasa. Rudi baadaye.</p>
+    </div>
+
+    <div v-if="tab === 'music'" class="empty">
+      <h3>Muziki</h3>
+      <p>Nyimbo zinazotrend hivi karibuni zitakuja hapa.</p>
+    </div>
+
+    <div class="bottom-nav">
+      <span class="active">🏠 Nyumbani</span>
+      <span @click="goSearch">🔍 Tafuta</span>
+      <span @click="goPublish">＋ Chapisha</span>
+      <span>💬 Ujumbe</span>
+      <span>👤 Mimi</span>
     </div>
   </div>
 </template>
 
-<script setup lang="tsx">
-import SlideHorizontal from '@/components/slide/SlideHorizontal.vue'
-import SlideItem from '@/components/slide/SlideItem.vue'
-import Comment from '../../components/Comment.vue'
-import Share from '../../components/Share.vue'
-import IndicatorHome from './components/IndicatorHome.vue'
-import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from 'vue'
-import bus, { EVENT_KEY } from '../../utils/bus'
-import { useNav } from '@/utils/hooks/useNav'
-import PlayFeedback from '@/pages/home/components/PlayFeedback.vue'
-import ShareTo from '@/pages/home/components/ShareTo.vue'
-import DouyinCode from '../../components/DouyinCode.vue'
-import FollowSetting from '@/pages/home/components/FollowSetting.vue'
-import BlockDialog from '../message/components/BlockDialog.vue'
-import Search from '../../components/Search.vue'
-import ConfirmDialog from '../../components/dialog/ConfirmDialog.vue'
-import FollowSetting2 from '@/pages/home/components/FollowSetting2.vue'
-import ShareToFriend from '@/pages/home/components/ShareToFriend.vue'
-import UserPanel from '@/components/UserPanel.vue'
-import Community from '@/pages/home/slide/Community.vue'
-import Slide0 from '@/pages/home/slide/Slide0.vue'
-import Slide2 from '@/pages/home/slide/Slide2.vue'
-import Slide4 from '@/pages/home/slide/Slide4.vue'
-import { DefaultUser } from '@/utils/const_var'
-import { _no } from '@/utils'
-import LongVideo from '@/pages/home/slide/LongVideo.vue'
-import { useBaseStore } from '@/store/pinia'
-import BaseMask from '@/components/BaseMask.vue'
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const nav = useNav()
-const baseStore = useBaseStore()
-const uploader = ref()
-const isMobile = ref(/Mobi|Android|iPhone/i.test(navigator.userAgent))
+const router = useRouter()
+const tab = ref('foryou')
 
-const state = reactive({
-  active: true,
-  baseIndex: 1,
-  navIndex: 4,
-  itemIndex: 0,
-  test: '',
-  recommendList: [],
-  isSharing: false,
-  canMove: true,
-  shareType: -1,
-  showPlayFeedback: false,
-  showShareDuoshan: false,
-  showShareDialog: false,
-  showShare2WeChatZone: false,
-  showDouyinCode: false,
-  showFollowSetting: false,
-  showFollowSetting2: false,
-  showBlockDialog: false,
-  showChangeNote: false,
-  shareToFriend: false,
+const videos = ref([
+  { id: 1, title: 'Video kali ya leo - usikose kuangalia', author: 'nelson', views: '12.5K', likes: '1.2K', comments: 89, duration: '0:32' },
+  { id: 2, title: 'Maisha ya Dar es Salaam', author: 'tanzania', views: '8.1K', likes: 940, comments: 45, duration: '0:48' },
+  { id: 3, title: 'Muziki mpya wa Bongo Flava', author: 'bongo', views: '25K', likes: '3.1K', comments: 210, duration: '1:05' },
+  { id: 4, title: 'Jinsi ya kupika Pilau', author: 'mama_ntilie', views: '5.2K', likes: 620, comments: 32, duration: '2:10' }
+])
 
-  commentVisible: false,
-  fullScreen: false,
-  currentItem: {
-    aweme_id: '',
-    author: DefaultUser,
-    isRequest: false,
-    aweme_list: []
-  }
-})
-
-function delayShowDialog(cb: Function) {
-  setTimeout(cb, 400)
+const goSearch = () => {
+  router.push('/search')
 }
 
-function setCurrentItem(item) {
-  if (!state.active) return
-  // console.log('sss',item,state.baseIndex)
-  if (state.baseIndex !== 1) return
-  if (state.currentItem.author?.uid !== item.author?.uid) {
-    state.currentItem = {
-      ...item,
-      isRequest: false,
-      aweme_list: []
-    }
-  }
-  // console.log('item', item)
+const goPublish = () => {
+  router.push('/publish')
 }
 
-onMounted(() => {
-  bus.on(EVENT_KEY.ENTER_FULLSCREEN, () => {
-    if (!state.active) return
-    state.fullScreen = true
-  })
-  bus.on(EVENT_KEY.EXIT_FULLSCREEN, () => {
-    if (!state.active) return
-    state.fullScreen = false
-  })
-  bus.on(EVENT_KEY.OPEN_COMMENTS, () => {
-    if (!state.active) return
-    bus.emit(EVENT_KEY.ENTER_FULLSCREEN)
-    state.commentVisible = true
-  })
-  bus.on(EVENT_KEY.CLOSE_COMMENTS, () => {
-    if (!state.active) return
-    bus.emit(EVENT_KEY.EXIT_FULLSCREEN)
-    state.commentVisible = false
-  })
-  bus.on(EVENT_KEY.SHOW_SHARE, () => {
-    if (!state.active) return
-    state.isSharing = true
-  })
-  bus.on(EVENT_KEY.NAV, ({ path, query }) => {
-    if (!state.active) return
-    nav(path, query)
-  })
-  bus.on(EVENT_KEY.GO_USERINFO, () => {
-    if (!state.active) return
-    state.baseIndex = 2
-  })
-  bus.on(EVENT_KEY.CURRENT_ITEM, setCurrentItem)
-})
-
-onUnmounted(() => {
-  bus.offAll()
-})
-
-onActivated(() => {
-  state.active = true
-  bus.emit(EVENT_KEY.TOGGLE_CURRENT_VIDEO)
-})
-
-onDeactivated(() => {
-  state.active = false
-  bus.emit(EVENT_KEY.TOGGLE_CURRENT_VIDEO)
-})
-
-function closeComments() {
-  bus.emit(EVENT_KEY.CLOSE_COMMENTS)
-}
-
-function dislike() {
-  // listRef.value.dislike(state.list[1])
-  // state.list[state.index] = state.list[1]
-  // _notice('操作成功，将减少此类视频的推荐')
+const shareVideo = (video) => {
+  alert('Unashiriki: ' + video.title)
 }
 </script>
 
-<style scoped lang="less">
-.test-slide-wrapper {
-  font-size: 14rem;
-  width: 100%;
-  height: 100%;
-  background: black;
-  overflow: hidden;
-
-  .sidebar {
-    touch-action: pan-y;
-    width: 80%;
-    height: calc(var(--vh, 1vh) * 100);
-    overflow: auto;
-    background: rgb(22, 22, 22);
-    padding: 10rem;
-    padding-bottom: 20rem;
-    box-sizing: border-box;
-
-    & > .header {
-      font-size: 16rem;
-      display: flex;
-      color: white;
-      justify-content: space-between;
-      align-items: center;
-
-      .right {
-        border-radius: 20rem;
-        padding: 8rem 15rem;
-        background: rgb(36, 36, 36);
-        display: flex;
-        align-items: center;
-        font-size: 14rem;
-        gap: 10rem;
-
-        svg {
-          font-size: 18rem;
-        }
-      }
-    }
-
-    .card {
-      margin-top: 10rem;
-      border-radius: 12rem;
-      padding: 15rem;
-      background: rgb(29, 29, 29);
-
-      .header {
-        margin-bottom: 8rem;
-        font-size: 14rem;
-        display: flex;
-        color: white;
-        justify-content: space-between;
-        align-items: center;
-
-        .right {
-          display: flex;
-          align-items: center;
-          font-size: 12rem;
-          gap: 4rem;
-          color: gray;
-
-          svg {
-            font-size: 16rem;
-          }
-        }
-      }
-
-      .content {
-        color: white;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-
-        .item {
-          min-height: 20vw;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          font-size: 14rem;
-          gap: 8rem;
-
-          svg {
-            font-size: 28rem;
-          }
-
-          .xcx {
-            border-radius: 12rem;
-            width: 50rem;
-            height: 50rem;
-          }
-        }
-
-        .avatar {
-          height: 25vw;
-
-          img {
-            border-radius: 50%;
-            width: 50rem;
-          }
-        }
-      }
-    }
-  }
-
-  .slide-content {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.first-horizontal-item {
-  //width: 90vw;
-  //height: 80vh;
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - var(--footer-height)) !important;
-  overflow: hidden;
-  border-radius: 10rem;
-}
-
-.guide {
+<style scoped>
+.home {
+  background: #000;
   color: white;
-  z-index: 999;
-  background: var(--active-main-bg);
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 16rem;
-  overflow: hidden;
-  text-align: center;
-
-  .danger {
-    margin-top: 10rem;
-    font-size: 40rem;
-    color: red;
-  }
-
-  .close {
-    cursor: pointer;
-    font-size: 18rem;
-    color: white;
-    position: absolute;
-    right: 15rem;
-    top: 15rem;
-  }
-
-  .txt {
-    text-align: left;
-    padding: 0 24rem;
-  }
-
-  img {
-    display: block;
-    width: 350rem;
-  }
+  min-height: 100vh;
+  padding-bottom: 70px;
 }
-</style>
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+.topbar h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.top-actions {
+  font-size: 14px;
+}
+.tabs {
+  display: flex;
+  gap: 20px;
+  padding: 0 16px 12px;
+  border-bottom: 1px solid #222;
+}
+.tabs span {
+  color: #888;
+  cursor: pointer;
+}
+.tabs span.active {
+  color: white;
+  font-weight: bold;
+  border-bottom: 2px solid white;
+  padding-bottom: 4px;
+}
+.feed {
+  padding: 12px;
+}
+.video-card {
+  background: #111;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.video-thumb {
+  height: 220px;
+  background: linear-gradient(135deg, #ff0050, #00f2ea);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.play {
+  font-size: 48px;
+}
+.duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.video-info {
+  padding: 12px;
+}
+.title {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.author {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.actions {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #ccc;
+}
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #aaa;
+}
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #000;
+  border-top: 1px solid #222;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  font-size: 13px;
+}
+.bottom-nav span {
+  color: #888;
+}
+.bottom-nav span.active {
+  color: white;
+  font-weight: bold;
+}
+</style
