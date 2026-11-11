@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/less/index.less'
+import swahili from "./Src/lang/swahili";
 import { startMock } from '@/mock'
 import router from './router'
 import mixin from './utils/mixin'
