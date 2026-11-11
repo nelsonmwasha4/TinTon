@@ -20,7 +20,7 @@
         :loadingWithText="true"
         @click="login"
       >
-        {{ data.loading.login ? 'Logging in...: '一Log In With One Tap}}
+        {{ data.loading.login ? 'Logging in...: '一Log In With One Tap'}}
       </dy-button>
       <dy-button :active="false" type="white" @click="nav('/login/other')"
         >Log in with another phone number 
