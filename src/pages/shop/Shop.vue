@@ -1,337 +1,194 @@
 <template>
-  <div id="Shop">
-    <div class="wrapper">
-      <div class="search">
-        <div class="search-input">
-          <Icon icon="tabler:search" />
-          <div class="placeholder">Top up 50 TZS Airtime</div>
-          <Icon color="gray" icon="lucide:camera" />
-          <div class="search-notice">Search</div>
-        </div>
-        <div class="more">
-          <Icon icon="ep:shopping-cart" />
-        </div>
+  <div class="shop">
+    <div class="topbar">
+      <h2>TinTon Shop</h2>
+      <span @click="goCart">🛒 {{ cart.length }}</span>
+    </div>
+
+    <div class="search-box">
+      <input v-model="keyword" placeholder="Tafuta bidhaa..." class="search-input" />
+    </div>
+
+    <div class="cats">
+      <span :class="{ active: cat === 'zote' }" @click="cat = 'zote'">Zote</span>
+      <span :class="{ active: cat === 'nguo' }" @click="cat = 'nguo'">Nguo</span>
+      <span :class="{ active: cat === 'simu' }" @click="cat = 'simu'">Simu</span>
+      <span :class="{ active: cat === 'chakula' }" @click="cat = 'chakula'">Chakula</span>
+      <span :class="{ active: cat === 'urembo' }" @click="cat = 'urembo'">Urembo</span>
+    </div>
+
+    <div class="grid">
+      <div v-for="item in filtered" :key="item.id" class="card" @click="goDetail(item)">
+        <div class="img">{{ item.emoji }}</div>
+        <div class="name">{{ item.name }}</div>
+        <div class="price">TSh {{ item.price.toLocaleString() }}</div>
+        <div class="meta">⭐ {{ item.rating }} • {{ item.sold }} zimeuzwa</div>
+        <button class="add-btn" @click.stop="addToCart(item)">Weka Kikapuni</button>
       </div>
     </div>
-    <ScrollList class="Scroll" :api="recommendedShop">
-      <template v-slot="{ list }">
-        <div class="top-card">
-          <div class="card">
-            <div class="options">
-              <div class="option" @click="_no">
-                <Icon icon="lets-icons:order-light" />
-                <div>My Order</div>
-              </div>
-              <div class="option" @click="_no">
-                <Icon icon="material-symbols-light:charging-station-outline" />
-                <div>Airtime Top up</div>
-              </div>
-              <div class="option" @click="_no">
-                <Icon icon="system-uicons:message" />
-                <div>Shoping Messages</div>
-              </div>
-              <div class="option" @click="_no">
-                <Icon icon="fluent:location-16-regular" />
-                <div>Express Delivery</div>
-              </div>
-              <div class="option" @click="_no">
-                <Icon icon="dashicons:money-alt" />
-                <div>Returns/Support</div>
-              </div>
-              <div class="option" @click="_no">
-                <Icon icon="icon-park-outline:clothes-turtleneck" />
-                <div>Trendy Fashion</div>
-              </div>
-            </div>
-          </div>
-          <div class="card" style="margin-bottom: 5rem">
-            <div class="baiyibutie">
-              <div class="item">
-                <img src="@/assets/img/icon/shop/baiyibutie.png" alt="" />
-                <span>Special Offer</span>
-              </div>
-              <div class="item">
-                <img src="@/assets/img/icon/shop/1.webp" alt="" />
-                <span class="price">
-                  <span class="m">TZS</span>
-                  <span>470</span>
-                </span>
-              </div>
-              <div class="item">
-                <img src="@/assets/img/icon/shop/2.webp" alt="" />
-                <span class="price">
-                  <span class="m">TZS</span>
-                  <span>699</span>
-                </span>
-              </div>
-              <div class="item">
-                <img src="@/assets/img/icon/shop/3.png" alt="" />
-                <span class="price">
-                  <span class="m">TZS</span>
-                  <span>8.8</span>
-                </span>
-              </div>
-              <div class="item">
-                <img src="@/assets/img/icon/shop/4.jpg" alt="" />
-                <span class="price">
-                  <span class="m">TZS</span>
-                  <span>2.99</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <WaterfallList :list="list">
-          <template v-slot="{ item }">
-            <div class="goods" @click="nav('/shop/detail', {}, item)">
-              <div class="item">
-                <img class="poster" v-lazy="_checkImgUrl('goods/' + item.cover)" />
-                <div class="bottom">
-                  <div class="desc">
-                    {{ item.name }}
-                  </div>
-                  <div class="discounts" v-if="item.discount">
-                    {{ item.discount }}
-                  </div>
-                  <div class="info">
-                    <div class="price">
-                      ￥
-                      <div class="big">{{ item.price }}</div>
-                    </div>
-                    <div class="num">Sold{{ item.sold }}件</div>
-                  </div>
-                  <div class="low" v-if="item.isLowPrice">Lowest price in 30 days</div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </WaterfallList>
-      </template>
-    </ScrollList>
-    <BaseFooter v-bind:init-tab="2" :is-white="true" style="position: fixed; left: 0" />
+
+    <div v-if="filtered.length === 0" class="empty">Hakuna bidhaa ya "{{ keyword }}"</div>
+
+    <div v-if="cart.length > 0" class="cart-bar">
+      <span>{{ cart.length }} bidhaa • TSh {{ total.toLocaleString() }}</span>
+      <button @click="checkout">Nunua Sasa</button>
+    </div>
   </div>
 </template>
 
-<script setup lang="tsx">
-import { useNav } from '@/utils/hooks/useNav'
-import { _checkImgUrl, _no } from '@/utils'
-import ScrollList from '@/components/ScrollList.vue'
-import { recommendedShop } from '@/api/user'
-import WaterfallList from '@/components/WaterfallList.vue'
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-defineOptions({
-  name: 'Shop'
+const router = useRouter()
+const keyword = ref('')
+const cat = ref('zote')
+const cart = ref([])
+
+const products = ref([
+  { id: 1, name: 'T-Shirt ya TinTon', emoji: '👕', price: 15000, rating: 4.8, sold: 120, cat: 'nguo' },
+  { id: 2, name: 'Kofia Kali', emoji: '🧢', price: 12000, rating: 4.6, sold: 85, cat: 'nguo' },
+  { id: 3, name: 'Earbuds - Sauti Kali', emoji: '🎧', price: 45000, rating: 4.9, sold: 210, cat: 'simu' },
+  { id: 4, name: 'Kava ya Simu', emoji: '📱', price: 8000, rating: 4.5, sold: 340, cat: 'simu' },
+  { id: 5, name: 'Pilau Mix - 1kg', emoji: '🍚', price: 9000, rating: 4.7, sold: 150, cat: 'chakula' },
+  { id: 6, name: 'Lipstick - Rangi Kali', emoji: '💄', price: 18000, rating: 4.8, sold: 95, cat: 'urembo' }
+])
+
+const filtered = computed(() => {
+  return products.value.filter((p) => {
+    const matchCat = cat.value === 'zote' || p.cat === cat.value
+    const matchKey = p.name.toLowerCase().includes(keyword.value.toLowerCase())
+    return matchCat && matchKey
+  })
 })
 
-const nav = useNav()
+const total = computed(() => cart.value.reduce((s, x) => s + x.price, 0))
+
+const addToCart = (item) => {
+  cart.value.push(item)
+  alert(item.name + ' imeongezwa kikapuni!')
+}
+
+const goDetail = (item) => {
+  router.push('/shop/detail/' + item.id)
+}
+
+const goCart = () => {
+  if (cart.value.length === 0) alert('Kikapu kiko tupu')
+  else alert('Una bidhaa ' + cart.value.length + ' - Jumla TSh ' + total.value.toLocaleString())
+}
+
+const checkout = () => {
+  alert('Asante! Oda yako ya TSh ' + total.value.toLocaleString() + ' imepokelewa. Tutakupigia simu.')
+  cart.value = []
+}
 </script>
 
-<style scoped lang="less">
-@fColor: #f1f1f1;
-
-#Shop {
-  font-size: 14rem;
-  position: relative;
+<style scoped>
+.shop {
+  padding: 16px;
+  padding-bottom: 80px;
   background: #f8f8f8;
-  padding: 10rem;
-  color: black;
-
-  .wrapper {
-  }
-
-  .search {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    height: 36rem;
-    box-sizing: border-box;
-    margin-bottom: 10rem;
-
-    svg {
-      color: gray;
-      font-size: 20rem;
-    }
-
-    .search-input {
-      border: 2rem solid red;
-      border-radius: 12rem;
-      height: 100%;
-      padding: 0 10rem;
-      padding-right: 3rem;
-      flex: 1;
-      gap: 10rem;
-      display: flex;
-      align-items: center;
-
-      .placeholder {
-        flex: 1;
-      }
-
-      img {
-        margin-right: 10rem;
-      }
-
-      .search-notice {
-        background: rgb(242, 62, 92);
-        padding: 0 10rem;
-        height: 85%;
-        border-radius: 10rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-      }
-    }
-
-    .more {
-      margin-left: 10rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12rem;
-    }
-  }
-
-  .card {
-    background: white;
-    padding: 10rem 15rem;
-    margin-bottom: 10rem;
-    border-radius: 8rem;
-  }
-
-  .options {
-    display: flex;
-    overflow-x: auto;
-    box-sizing: border-box;
-
-    .option {
-      width: 17vw;
-      flex-shrink: 0;
-      font-size: 13rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      svg {
-        font-size: 30rem;
-        margin-bottom: 3rem;
-      }
-    }
-  }
-
-  .baiyibutie {
-    display: flex;
-
-    .item {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 25%;
-      font-size: 12rem;
-      color: gray;
-
-      img {
-        width: 80%;
-      }
-
-      .price {
-        color: red;
-        font-size: 16rem;
-        font-weight: bold;
-
-        .m {
-          font-size: 10rem;
-        }
-      }
-    }
-  }
-
-  .Scroll {
-    position: relative;
-    z-index: 2;
-    height: calc(var(--vh, 1vh) * 100 - var(--footer-height) * 2) !important;
-  }
-
-  .fixed {
-    background: @fColor;
-  }
-
-  .top-card {
-    margin-bottom: 10rem;
-  }
-
-  @p: 5rem;
-
-  .goods {
-    box-sizing: border-box;
-    margin-bottom: 10rem;
-
-    .item {
-      border-radius: 8rem;
-      overflow: hidden;
-      background: white;
-
-      img {
-        width: 100%;
-      }
-
-      .bottom {
-        padding: 10rem;
-
-        .desc {
-          color: black;
-          font-size: 16rem;
-          margin-bottom: 8rem;
-          @lh: 18rem;
-          line-height: @lh;
-          height: @lh * 2;
-          overflow: hidden;
-        }
-
-        .discounts {
-          display: inline-block;
-          @c: rgb(199, 89, 106);
-          border: 1rem solid @c;
-          padding: 0 4rem;
-          color: @c;
-          font-size: 12rem;
-          margin-bottom: 4rem;
-        }
-
-        .info {
-          display: flex;
-          align-items: flex-end;
-
-          .price {
-            color: rgb(248, 38, 74);
-            display: flex;
-            align-items: flex-end;
-            font-size: 14rem;
-            margin-right: 5rem;
-
-            .big {
-              font-size: 22rem;
-              font-weight: bold;
-              transform: translateY(2rem);
-            }
-          }
-
-          .num {
-            color: darkgray;
-            font-size: 12rem;
-          }
-        }
-
-        .low {
-          margin-top: 2rem;
-          color: rgb(230, 153, 92);
-        }
-      }
-    }
-  }
+  min-height: 100vh;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar h2 {
+  margin: 0;
+}
+.search-box {
+  margin: 14px 0;
+}
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+.cats {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+.cats span {
+  background: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-size: 13px;
+  border: 1px solid #eee;
+}
+.cats span.active {
+  background: #ff0050;
+  color: white;
+  border: none;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.img {
+  font-size: 48px;
+  margin: 10px 0;
+}
+.name {
+  font-weight: bold;
+  font-size: 14px;
+}
+.price {
+  color: #ff0050;
+  font-weight: bold;
+  margin: 6px 0;
+}
+.meta {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.add-btn {
+  width: 100%;
+  padding: 9px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+.empty {
+  text-align: center;
+  color: #999;
+  margin-top: 40px;
+}
+.cart-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #000;
+  color: white;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-bar button {
+  background: #ff0050;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
 }
 </style>
+<template>
