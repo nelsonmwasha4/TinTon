@@ -33,16 +33,16 @@
         </div>
         <div class="right">
           I have  read and agree to the 
-          <span class="link" @click="nav('/service-protocol', { type: '“TinTon User Service Agreement})"
+          <span class="link" @click="nav('/service-protocol', { type: '“TinTon User Service Agreement"'})"
             >User Agreement</span
           >
           and
-          <span class="link" @click="nav('/service-protocol', { type: '“TinTon Privacy Policy})"
+          <span class="link" @click="nav('/service-protocol', { type: '“TinTon Privacy Policy"'})"
             >Privacy Policy</span
           >
           <div>
             and also
-            <span class="link" @click="nav('/service-protocol', { type: 'TinTon Authentication Service Agreement})"
+            <span class="link" @click="nav('/service-protocol', { type: '"TinTon Authentication Service Agreement'})"
               >《TinTon Authentication Service Terms 》</span
             >
             ，And Log In To Use TinTon 
