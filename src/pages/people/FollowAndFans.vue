@@ -1,180 +1,150 @@
 <template>
-  <div class="FollowAndFans" id="FollowAndFans">
-    <BaseHeader backMode="light">
-      <template v-slot:center>
-        <span class="f14">{{ store.userinfo.nickname }}</span>
-      </template>
-      <template v-slot:right>
-        <div>
-          <img
-            src="../../assets/img/icon/people/add-user.png"
-            style="width: 2rem"
-            @click="nav('/people/find-acquaintance')"
-          />
-        </div>
-      </template>
-    </BaseHeader>
-    <div class="content">
-      <div class="indicator-wrapper">
-        <Indicator
-          tabStyleWidth="50%"
-          :tabTexts="['关注', '粉丝']"
-          v-model:active-index="data.slideIndex"
-        >
-        </Indicator>
-      </div>
-      <SlideHorizontal
-        v-model:index="data.slideIndex"
-        style="height: calc(var(--vh, 1vh) * 100 - 111rem)"
-      >
-        <SlideItem class="tab1">
-          <Search
-            v-model="data.searchKey"
-            placeholder="搜索用户备注或名字"
-            :is-show-right-text="false"
-          />
-          <div class="is-search" v-if="data.searchKey">
-            <div class="search-result" v-if="data.searchFriends.length">
-              <People :key="i" v-for="(item, i) in data.searchFriends" :people="item"></People>
-            </div>
-            <div class="no-result" v-else>
-              <img src="../../assets/img/icon/no-result.png" alt="" />
-              <span class="n1">搜索结果为空</span>
-              <span class="n2">没有搜索到相关内容</span>
-            </div>
-          </div>
-          <div class="no-search" v-else>
-            <div class="title">我的关注</div>
-            <People :key="i" v-for="(item, i) in store.friends.all" :people="item"></People>
-          </div>
-        </SlideItem>
-        <SlideItem class="tab2">
-          <People :key="i" v-for="(item, i) in store.friends.all" :people="item"></People>
-          <NoMore />
-        </SlideItem>
-      </SlideHorizontal>
+  <div class="follow-page">
+    <div class="topbar">
+      <span @click="$router.back()">← Nyuma</span>
+      <b>{{ userName }}</b>
+      <span>⋯</span>
     </div>
+
+    <div class="tabs">
+      <span :class="{ active: tab === 'following' }" @click="tab = 'following'">Ninawafuata ({{ following.length }})</span>
+      <span :class="{ active: tab === 'followers' }" @click="tab = 'followers'">Wanaonifuata ({{ followers.length }})</span>
+    </div>
+
+    <div class="search">
+      <input v-model="keyword" placeholder="Tafuta mtu..." />
+    </div>
+
+    <div class="list">
+      <div v-for="person in filtered" :key="person.id" class="person">
+        <div class="avatar">{{ person.emoji }}</div>
+        <div class="info">
+          <div class="name">{{ person.name }}</div>
+          <div class="handle">@{{ person.handle }} • {{ person.followers }} followers</div>
+        </div>
+        <button :class="{ following: person.isFollowing }" @click="toggleFollow(person)">
+          {{ person.isFollowing ? 'Unafuata ✓' : 'Mfuate' }}
+        </button>
+      </div>
+    </div>
+
+    <div v-if="filtered.length === 0" class="empty">Hakuna mtu wa "{{ keyword }}"</div>
   </div>
 </template>
-<script setup lang="ts">
-import People from './components/People.vue'
-import Search from '../../components/Search.vue'
-import Indicator from '../../components/slide/Indicator.vue'
-import { useBaseStore } from '@/store/pinia'
-import { onMounted, reactive, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useNav } from '@/utils/hooks/useNav'
 
-defineOptions({
-  name: 'FindAcquaintance'
+<script setup>
+import { ref, computed } from 'vue'
+
+const tab = ref('following')
+const keyword = ref('')
+const userName = ref('Nelson')
+
+const following = ref([
+  { id: 1, name: 'Zawadi Mushi', handle: 'zawadi', followers: '12K', emoji: '👩🏾', isFollowing: true },
+  { id: 2, name: 'Baraka Juma', handle: 'baraka', followers: '8.5K', emoji: '👨🏾', isFollowing: true },
+  { id: 3, name: 'Neema Peter', handle: 'neema', followers: '25K', emoji: '👩🏾‍🦱', isFollowing: true },
+  { id: 4, name: 'Bongo Music', handle: 'bongomusic', followers: '150K', emoji: '🎵', isFollowing: true }
+])
+
+const followers = ref([
+  { id: 5, name: 'Asha Mwalimu', handle: 'asha', followers: '1.2K', emoji: '👩🏾', isFollowing: false },
+  { id: 6, name: 'Kelvin Moshi', handle: 'kelvin', followers: '890', emoji: '👨🏾', isFollowing: true },
+  { id: 7, name: 'Fatuma Said', handle: 'fatuma', followers: '3.4K', emoji: '🧕🏾', isFollowing: false },
+  { id: 8, name: 'Dar Vibes', handle: 'darvibes', followers: '45K', emoji: '🌴', isFollowing: false }
+])
+
+const filtered = computed(() => {
+  const list = tab.value === 'following' ? following.value : followers.value
+  if (!keyword.value) return list
+  return list.filter((p) => p.name.toLowerCase().includes(keyword.value.toLowerCase()))
 })
 
-const route = useRoute()
-const nav = useNav()
-const store = useBaseStore()
-const data = reactive({
-  isSearch: false,
-  searchKey: '',
-
-  slideIndex: 0,
-  searchFriends: []
-})
-
-onMounted(() => {
-  data.slideIndex = ~~route.query.type
-})
-
-watch(
-  () => data.searchKey,
-  (newVal) => {
-    if (newVal) {
-      //TODO 搜索时仅仅判断是否包含了对应字符串，抖音做了拼音判断的
-      data.searchFriends = store.friends.all.filter((v) => {
-        if (v.name.includes(newVal)) return true
-        return v.account.includes(newVal)
-      })
-    } else {
-      data.searchFriends = []
-    }
-  }
-)
+const toggleFollow = (person) => {
+  person.isFollowing = !person.isFollowing
+}
 </script>
 
-<style scoped lang="less">
-@import '../../assets/less/index';
-
-.FollowAndFans {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+<style scoped>
+.follow-page {
+  background: #fff;
+  min-height: 100vh;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+.tabs {
+  display: flex;
+}
+.tabs span {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  color: #888;
+  font-size: 14px;
+}
+.tabs span.active {
+  color: #000;
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+}
+.search {
+  padding: 12px 16px;
+}
+.search input {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.list {
+  padding: 0 16px;
+}
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.avatar {
+  width: 48px;
+  height: 48px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+.info {
+  flex: 1;
+}
+.name {
+  font-weight: bold;
+}
+.handle {
+  color: #888;
+  font-size: 13px;
+}
+.person button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background: #ff0050;
   color: white;
-  font-size: 14rem;
-
-  .content {
-    padding-top: var(--common-header-height);
-
-    .indicator-wrapper {
-      padding: 0 var(--page-padding);
-    }
-
-    .search-ctn {
-      z-index: 9;
-      left: 0;
-      background: var(--main-bg);
-      position: fixed;
-      width: 100vw;
-      box-sizing: border-box;
-      padding: 10rem var(--page-padding) 0 var(--page-padding);
-    }
-  }
-
-  .tab1,
-  .tab2 {
-    overflow: auto;
-    padding: 0 var(--page-padding);
-    box-sizing: border-box;
-  }
-
-  .tab1 {
-    .title {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10rem;
-      color: var(--second-text-color);
-      font-size: 12rem;
-    }
-
-    .no-search {
-      padding-top: 60rem;
-    }
-
-    .is-search {
-      padding-top: 50rem;
-
-      .no-result {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        img {
-          margin-top: 150rem;
-          height: 150rem;
-        }
-
-        .n1 {
-          margin-top: 40rem;
-          font-size: 16rem;
-        }
-
-        .n2 {
-          margin-top: 20rem;
-          font-size: 12rem;
-          color: var(--second-text-color);
-        }
-      }
-    }
-  }
+  font-size: 13px;
+}
+.person button.following {
+  background: #f0f0f0;
+  color: #333;
+}
+.empty {
+  text-align: center;
+  color: #999;
+  margin-top: 40px;
 }
 </style>
