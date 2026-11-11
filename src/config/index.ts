@@ -8,7 +8,7 @@ const BASE_URL_MAP = {
   PROD: '',
   // GP_PAGES: '/dist',
   GP_PAGES: '',
-  GITEE_PAGES: '/douyin,
+  GITEE_PAGES: '/tinton',
   UNI: 'https://dy.ttentau.top'
 }
 
