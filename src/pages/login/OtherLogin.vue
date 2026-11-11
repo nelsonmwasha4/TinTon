@@ -1,224 +1,75 @@
 <template>
-  <div class="other-login" id="other-login">
-    <BaseHeader mode="light" backMode="dark" backImg="back">
-      <template v-slot:right>
-        <span class="f14" @click="$router.push('/login/help')">Help&Settings</span>
-      </template>
-    </BaseHeader>
-    <div class="content">
-      <div class="desc">
-        <div class="title">Log in to see friends content</div>
-        <div class="sub-title">Unregistered number will be  registered automatically after verification</div>cxz
+  <div class="login-page">
+    <div class="login-box">
+      <h2>Karibu TinTon</h2>
+      <p>Ingia ili kuendelea</p>
+
+      <div class="agree">
+        <input type="checkbox" v-model="isAgree" />
+        <span>I have read and agree to the </span>
+        <span class="link" @click="$router.push('/service-protocol')">User Agreement</span>
+        <span> and </span>
+        <span class="link" @click="$router.push('/privacy-policy')">Privacy Policy</span>
+        <span>, and log in to use TinTon</span>
       </div>
 
-      <LoginInput autofocus type="phone" v-model="phone" placeholder="Enter Phone Number" />
-
-      <div class="notice" v-if="notice">
-        {{ notice }}
-      </div>
-
-      <div class="protocol" :class="showAnim ? 'anim-bounce' : ''">
-        <Tooltip style="top: -150%; left: -10rem" v-model="showTooltip" />
-        <div class="left">
-          <Check v-model="isAgree" />
-        </div>
-        <div class="right">
-          I have read and agree to the 
-          <span
-            class="link"
-            @click="$router.push('/service-protocol')" { type: '“TinTon User Service Agreement'})"
-            >User Agreement</span
-          >
-          and
-          <span class="link" @click="$router.push('/service-protocol', { type: '“TinTon Privacy Policy"'})"
-            >Privacy Policy</span
-          >
-          ，and log in to use TinTon 
-        </div>
-      </div>
-
-      <dy-button
-        type="primary"
-        :loading="loading"
-        :active="false"
-        :disabled="phone.length < 10"
-        @click="getCode"
-      >
-        Get SMS Code 
-      </dy-button>
-
-      <div class="options">
-        <span class="link" @click="$router.push('/login/password')">Password login</span>
-        <span class="link" @click="otherLogin">Log In Another Way</span>
-      </div>
-
-      <from-bottom-dialog
-        page-id="other-login"
-        v-model="isOtherLogin"
-        :show-heng-gang="false"
-        height="270rem"
-        mode="white"
-      >
-        <div class="block-dialog">
-          <div class="item" @click="_no">
-            <img src="../../assets/img/icon/login/toutiao-round.png" alt="" />
-            <span>log in with email address</span>
-          </div>
-          <div class="item" @click="_no">
-            <img src="../../assets/img/icon/login/qq.webp" alt="" />
-            <span>log in with Google</span>
-          </div>
-          <div class="item" @click="_no">
-            <img src="../../assets/img/icon/login/wechat.webp" alt="" />
-            <span>log in with Facebook</span>
-          </div>
-          <div class="item" @click="_no">
-            <img src="../../assets/img/icon/login/weibo.webp" alt="" />
-            <span>log in with Instagram</span>
-          </div>
-          <div class="space"></div>
-          <div class="item" @click="isOtherLogin = false">取消</div>
-        </div>
-      </from-bottom-dialog>
+      <button class="login-btn" :disabled="!isAgree || loading" @click="handleLogin">
+        {{ loading ? 'Inaingia...' : 'Ingia' }}
+      </button>
     </div>
   </div>
 </template>
-<script>
-import Check from '../../components/Check'
-import Tooltip from './components/Tooltip'
-import LoginInput from './components/LoginInput'
-import Base from './Base.js'
-import FromBottomDialog from '../../components/dialog/FromBottomDialog'
-import { _no } from '@/utils'
 
-export default {
-  name: 'OtherLogin',
-  extends: Base,
-  components: {
-    Check,
-    Tooltip,
-    LoginInput,
-    FromBottomDialog
-  },
-  data() {
-    return {
-      phone: '',
-      notice: ''
-    }
-  },
-  computed: {},
-  created() {},
-  methods: {
-    _no,
-    async getCode() {
-      let res = await this.check()
-      if (res) {
-        this.loading = true
-        setTimeout(() => {
-          this.$router.push('/login/verification-code')
-        }, 2000)
-      }
-    },
-    async otherLogin() {
-      let res = await this.check()
-      if (res) {
-        this.isOtherLogin = true
-      }
-    }
-  }
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const isAgree = ref(false)
+const loading = ref(false)
+
+const handleLogin = () => {
+  if (!isAgree.value) return
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+    router.push('/')
+  }, 800)
 }
 </script>
 
-<style scoped lang="less">
-@import '../../assets/less/index';
-@import 'Base.less';
-
-.other-login {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  overflow: auto;
-  color: black;
-  font-size: 14rem;
-  background: white;
-
-  .content {
-    padding: 60rem 30rem;
-
-    .desc {
-      margin-bottom: 60rem;
-      margin-top: 120rem;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-
-      .title {
-        margin-bottom: 20rem;
-        font-size: 20rem;
-      }
-
-      .phone-number {
-        letter-spacing: 3rem;
-        font-size: 30rem;
-        margin-bottom: 10rem;
-      }
-
-      .sub-title {
-        font-size: 12rem;
-        color: var(--second-text-color);
-      }
-    }
-
-    .button {
-      width: 100%;
-      margin-bottom: 5rem;
-    }
-
-    .protocol {
-      position: relative;
-      color: gray;
-      margin-top: 20rem;
-      font-size: 12rem;
-      display: flex;
-
-      .left {
-        padding-top: 1rem;
-        margin-right: 5rem;
-      }
-    }
-
-    .options {
-      position: relative;
-      font-size: 14rem;
-      display: flex;
-    }
-    .block-dialog {
-      color: black;
-
-      .item {
-        height: 50rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-top: 1px solid gainsboro;
-
-        img {
-          height: 25rem;
-          margin-right: 10rem;
-        }
-
-        &:nth-last-child(1) {
-          border-top: none;
-        }
-      }
-
-      .space {
-        height: 10rem;
-        background: whitesmoke;
-      }
-    }
-  }
+<style scoped>
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.login-box {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+.agree {
+  font-size: 14px;
+  margin: 20px 0;
+  line-height: 1.6;
+}
+.link {
+  color: #1989fa;
+  cursor: pointer;
+}
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1989fa;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.login-btn:disabled {
+  opacity: 0.5;
 }
 </style>
